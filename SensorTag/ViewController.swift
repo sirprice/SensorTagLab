@@ -9,12 +9,28 @@
 import UIKit
 import CoreBluetooth
 
+
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
    
     
     // Title labels
     var titleLabel : UILabel!
     var statusLabel : UILabel!
+    var ambientTemperatureLabel : UILabel!
+    var objectTemperatureLabel : UILabel!
+    
+    
+    // values
+    var ambientTemperature: Double = 0.0 {
+        didSet {
+            ambientTemperatureLabel.text = "Ambient Temperature: \(ambientTemperature)"
+        }
+    }
+    var objectTemperature: Double = 0.0 {
+        didSet {
+            objectTemperatureLabel.text = "Object Temperature: \(objectTemperature)"
+        }
+    }
     
     // BLE
     var centralManager : CBCentralManager!
@@ -48,6 +64,27 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         //statusLabel.center = CGPoint(x: self.view.frame.midX, y: (titleLabel.frame.maxY + statusLabel.bounds.height/2) )
         statusLabel.frame = CGRect(x: self.view.frame.origin.x, y: self.titleLabel.frame.maxY, width: self.view.frame.width, height: self.statusLabel.bounds.height)
         self.view.addSubview(statusLabel)
+        
+        // Set up ambient temperature label
+        ambientTemperatureLabel = UILabel()
+        ambientTemperatureLabel.textAlignment = NSTextAlignment.center
+        ambientTemperatureLabel.text = "Temperature: n/a"
+        ambientTemperatureLabel.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        ambientTemperatureLabel.sizeToFit()
+        ambientTemperatureLabel.frame = CGRect(x: self.view.frame.origin.x, y: self.statusLabel.frame.maxY, width: self.view.frame.width, height: self.ambientTemperatureLabel.bounds.height)
+        self.view.addSubview(ambientTemperatureLabel)
+        
+        // Set up object temperature label
+        objectTemperatureLabel = UILabel()
+        objectTemperatureLabel.textAlignment = NSTextAlignment.center
+        objectTemperatureLabel.text = "Temperature: n/a"
+        objectTemperatureLabel.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        objectTemperatureLabel.sizeToFit()
+        objectTemperatureLabel.frame = CGRect(x: self.view.frame.origin.x, y: self.ambientTemperatureLabel.frame.maxY, width: self.view.frame.width, height: self.objectTemperatureLabel.bounds.height)
+        self.view.addSubview(objectTemperatureLabel)
+
+
+        
     
         
         }
@@ -103,10 +140,76 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             self.sensorTagPeripheral = peripheral
             self.sensorTagPeripheral.delegate = self
             self.centralManager.connect(peripheral, options: nil)
+
+
         }
         else {
             self.statusLabel.text = "Sensor Tag NOT Found"
             //showAlertWithText(header: "Warning", message: "SensorTag Not Found")
+        }
+    }
+    // Discover services of the peripheral
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        self.statusLabel.text = "Discovering peripheral services"
+        peripheral.discoverServices(nil)
+    }
+    
+    
+    // If disconnected, start searching again
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        self.statusLabel.text = "Disconnected"
+        central.scanForPeripherals(withServices: nil, options: nil)
+    }
+    
+    // Check if the service discovered is valid i.e. one of the following:
+    // IR Temperature Service
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        self.statusLabel.text = "Looking at peripheral services"
+        for service in peripheral.services! {
+            let thisService = service as CBService
+            if SensorTag.isValidService(thisService) {
+                // Discover characteristics of all valid services
+                peripheral.discoverCharacteristics(nil, for: thisService)
+            }
+        }
+    }
+
+    
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        
+        self.statusLabel.text = "Enabling sensors"
+        
+        let enableValue: [UInt8] = [1]
+        
+        let enablyBytes = Data(bytes: enableValue , count: enableValue.count)
+        
+        for charateristic in service.characteristics! {
+            let thisCharacteristic = charateristic as CBCharacteristic
+            if SensorTag.isValidDataCharacteristic(thisCharacteristic) {
+                // Enable Sensor Notification
+                print("DataCharacteristic was valid: \(thisCharacteristic.description)")
+                self.sensorTagPeripheral.setNotifyValue(true, for: thisCharacteristic)
+            }
+            if SensorTag.isValidConfigCharacteristic(thisCharacteristic) {
+                // Enable Sensor
+                print("ConfigCharacteristic was valid: \(thisCharacteristic.description)")
+                self.sensorTagPeripheral.writeValue(enablyBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
+            }
+        }
+        
+    }
+
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        
+        self.statusLabel.text = "Connected"
+        //print("Data recieved! ")
+        
+        if characteristic.uuid == IRTemperatureDataUUID {
+            self.ambientTemperature = SensorTag.getAmbientTemperature(characteristic.value!)
+            self.objectTemperature = SensorTag.getObjectTemperature(characteristic.value!, ambientTemperature: self.ambientTemperature)
+           
         }
     }
 }
