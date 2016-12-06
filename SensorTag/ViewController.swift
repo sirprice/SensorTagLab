@@ -175,7 +175,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
 
     
-    
+    // sätter igång utvalda sensorer i SensorTagen
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         
         self.statusLabel.text = "Enabling sensors"
@@ -200,7 +200,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
     }
 
-    
+    // sensortaggen är nu redo för att göra stordåd. och tar nu emot data :) 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         self.statusLabel.text = "Connected"
