@@ -43,7 +43,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        let tvp = TCPManager(addr: "130.229.133.95", port: 6667)
+        tvp.sendString("iphone hi")//todo example only
+        tvp.close()
         // Initialize central manager on load
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
