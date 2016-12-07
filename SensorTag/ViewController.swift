@@ -56,6 +56,14 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         //chart.data = chartData
         
         
+        //TODO make sure that tcp manager dont hang the app
+        DispatchQueue.global(qos: .userInitiated).async {
+        let tvp = TCPManager(addr: "130.229.133.95", port: 6667)
+       // tvp.reconnect()
+            tvp.sendString("iphone hi")//todo example only
+            tvp.close()
+            print("connect")
+        }
         // Initialize central manager on load
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
@@ -217,14 +225,14 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         self.statusLabel.text = "Connected"
-        
+
         if characteristic.uuid == IRTemperatureDataUUID {
             //print("Data recieved! ")
             datanr += 1
             self.ambientTemperature = SensorTag.getAmbientTemperature(characteristic.value!)
-            self.objectTemperature = SensorTag.getObjectTemperature(characteristic.value!, ambientTemperature: self.ambientTemperature)
+            self.objectTemperature = SensorTag.getObjectTemperature(characteristic.value!)
             
-            let newData = BarChartDataEntry(x: Double(datanr), y: Double(SensorTag.getAmbientTemperature(characteristic.value!)))
+            let newData = BarChartDataEntry(x: Double(datanr), y: Double(SensorTag.getObjectTemperature(characteristic.value!)))
             dataEntries.append(newData)
             
             
@@ -236,8 +244,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 displayData = dataEntries
             }
             
-            
-         
             let chartDataSet = BarChartDataSet(values: displayData, label: "Temperature Count")
         
             chartData = BarChartData(dataSet: chartDataSet)

@@ -21,7 +21,8 @@ let IRTemperatureConfigUUID = CBUUID(string: "F000AA02-0451-4000-B000-0000000000
 
 class SensorTag {
     
-    
+    static let SCALE_LSB = 0.03125;
+
     // Check name of device from advertisement data
     class func sensorTagFound (_ advertisementData: [String: Any]!) -> Bool {
   
@@ -38,8 +39,21 @@ class SensorTag {
         return false
     }
     
+    class func getAmbientTemperature(_ val: Data) -> Double {
+        //let a =
+        //print(val)
+               let amb = Double( (Int(val[2]) * 8 ) + Int( val[3])) * SCALE_LSB
+        //print(amb)
+        return amb
+    }
+    
+    class func getObjectTemperature(_ val: Data) -> Double {
+        return Double( (Int(val[0]) * 8 ) + Int( val[1])) * SCALE_LSB
+    }
+
+    
     // Get ambient temperature value
-    class func getAmbientTemperature(_ value : Data) -> Double {
+    class func getAmbientTemperatureBad(_ value : Data) -> Double {
         let count = value.count
         var array = [Int8](repeating: 0, count: count)
         (value as NSData).getBytes(&array, length:count * MemoryLayout<Int8>.size)
@@ -49,7 +63,7 @@ class SensorTag {
     }
     
     // Get object temperature value
-    class func getObjectTemperature(_ value : Data, ambientTemperature : Double) -> Double {
+    class func getObjectTemperatureBad(_ value : Data, ambientTemperature : Double) -> Double {
         
         let count = value.count
         var array = [Int8](repeating: 0, count: count)

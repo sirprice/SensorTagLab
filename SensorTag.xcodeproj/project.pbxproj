@@ -13,6 +13,7 @@
 		230841671DF6F6DE00A98559 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 230841661DF6F6DE00A98559 /* Assets.xcassets */; };
 		2308416A1DF6F6DE00A98559 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 230841681DF6F6DE00A98559 /* LaunchScreen.storyboard */; };
 		230841721DF6FF4000A98559 /* SensorTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230841711DF6FF4000A98559 /* SensorTag.swift */; };
+		23F615411DF8636D00E935BD /* TCPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F615401DF8636D00E935BD /* TCPManager.swift */; };
 		C176BE2AFCFCC6543F0532F7 /* Pods_SensorTag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 320A67E1A097B583752FAE34 /* Pods_SensorTag.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		230841691DF6F6DE00A98559 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2308416B1DF6F6DE00A98559 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		230841711DF6FF4000A98559 /* SensorTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorTag.swift; sourceTree = "<group>"; };
+		23F615401DF8636D00E935BD /* TCPManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TCPManager.swift; path = ../TCPManager.swift; sourceTree = "<group>"; };
 		320A67E1A097B583752FAE34 /* Pods_SensorTag.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SensorTag.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D6A8B2878480211FBC05918 /* Pods-SensorTag.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SensorTag.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SensorTag/Pods-SensorTag.debug.xcconfig"; sourceTree = "<group>"; };
 		ABBF673CFBDBA22C2D4A8CC6 /* Pods-SensorTag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SensorTag.release.xcconfig"; path = "Pods/Target Support Files/Pods-SensorTag/Pods-SensorTag.release.xcconfig"; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 		2308415E1DF6F6DE00A98559 /* SensorTag */ = {
 			isa = PBXGroup;
 			children = (
+				23F615401DF8636D00E935BD /* TCPManager.swift */,
 				2308415F1DF6F6DE00A98559 /* AppDelegate.swift */,
 				230841611DF6F6DE00A98559 /* ViewController.swift */,
 				230841631DF6F6DE00A98559 /* Main.storyboard */,
@@ -216,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				230841621DF6F6DE00A98559 /* ViewController.swift in Sources */,
+				23F615411DF8636D00E935BD /* TCPManager.swift in Sources */,
 				230841721DF6FF4000A98559 /* SensorTag.swift in Sources */,
 				230841601DF6F6DE00A98559 /* AppDelegate.swift in Sources */,
 			);
