@@ -8,17 +8,22 @@
 
 import UIKit
 import CoreBluetooth
-
+import Charts
 
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
    
-    
+    var datanr = 0
+    var dataEntries: [BarChartDataEntry] = []
+    var chartData = BarChartData()
+    var lineDataSet = LineChartDataSet()
     // Title labels
     var titleLabel : UILabel!
     var statusLabel : UILabel!
     var ambientTemperatureLabel : UILabel!
     var objectTemperatureLabel : UILabel!
     
+    @IBOutlet weak var chart: BarChartView!
+  
     
     // values
     var ambientTemperature: Double = 0.0 {
@@ -43,6 +48,13 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        //updateChartWithData()
+        //lineDataSet = LineChartDataSet(values: dataEntries, label: "dynamic")
+        
+        //chartData.dataSets.append(lineDataSet)
+        
+        //chart.data = chartData
+        
         
         // Initialize central manager on load
         centralManager = CBCentralManager(delegate: self, queue: nil)
@@ -170,6 +182,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             if SensorTag.isValidService(thisService) {
                 // Discover characteristics of all valid services
                 peripheral.discoverCharacteristics(nil, for: thisService)
+                
             }
         }
     }
@@ -204,13 +217,44 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         self.statusLabel.text = "Connected"
-        //print("Data recieved! ")
         
         if characteristic.uuid == IRTemperatureDataUUID {
+            //print("Data recieved! ")
+            datanr += 1
             self.ambientTemperature = SensorTag.getAmbientTemperature(characteristic.value!)
             self.objectTemperature = SensorTag.getObjectTemperature(characteristic.value!, ambientTemperature: self.ambientTemperature)
-           
+            
+            let newData = BarChartDataEntry(x: Double(datanr), y: Double(SensorTag.getAmbientTemperature(characteristic.value!)))
+            dataEntries.append(newData)
+            
+            
+            var displayData: [BarChartDataEntry] = []
+            if dataEntries.count > 20 {
+                displayData = [BarChartDataEntry](dataEntries.dropFirst(dataEntries.count - 20))
+                
+            } else {
+                displayData = dataEntries
+            }
+            
+            
+         
+            let chartDataSet = BarChartDataSet(values: displayData, label: "Temperature Count")
+        
+            chartData = BarChartData(dataSet: chartDataSet)
+            chart.data = chartData
+            
+            chart.notifyDataSetChanged()
+            chart.maxVisibleCount = 5
+            chart.moveViewToX(Double(chartData.entryCount))
+            
         }
     }
 }
+
+
+
+
+
+
+
 

@@ -13,6 +13,7 @@
 		230841671DF6F6DE00A98559 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 230841661DF6F6DE00A98559 /* Assets.xcassets */; };
 		2308416A1DF6F6DE00A98559 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 230841681DF6F6DE00A98559 /* LaunchScreen.storyboard */; };
 		230841721DF6FF4000A98559 /* SensorTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230841711DF6FF4000A98559 /* SensorTag.swift */; };
+		C176BE2AFCFCC6543F0532F7 /* Pods_SensorTag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 320A67E1A097B583752FAE34 /* Pods_SensorTag.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,9 @@
 		230841691DF6F6DE00A98559 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2308416B1DF6F6DE00A98559 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		230841711DF6FF4000A98559 /* SensorTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorTag.swift; sourceTree = "<group>"; };
+		320A67E1A097B583752FAE34 /* Pods_SensorTag.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SensorTag.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D6A8B2878480211FBC05918 /* Pods-SensorTag.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SensorTag.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SensorTag/Pods-SensorTag.debug.xcconfig"; sourceTree = "<group>"; };
+		ABBF673CFBDBA22C2D4A8CC6 /* Pods-SensorTag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SensorTag.release.xcconfig"; path = "Pods/Target Support Files/Pods-SensorTag/Pods-SensorTag.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C176BE2AFCFCC6543F0532F7 /* Pods_SensorTag.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 			children = (
 				2308415E1DF6F6DE00A98559 /* SensorTag */,
 				2308415D1DF6F6DE00A98559 /* Products */,
+				30C1DA908B97BCFDACD69C13 /* Pods */,
+				40FB464F8D75F71C11287B98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +74,23 @@
 			path = SensorTag;
 			sourceTree = "<group>";
 		};
+		30C1DA908B97BCFDACD69C13 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8D6A8B2878480211FBC05918 /* Pods-SensorTag.debug.xcconfig */,
+				ABBF673CFBDBA22C2D4A8CC6 /* Pods-SensorTag.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		40FB464F8D75F71C11287B98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				320A67E1A097B583752FAE34 /* Pods_SensorTag.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +98,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2308416E1DF6F6DE00A98559 /* Build configuration list for PBXNativeTarget "SensorTag" */;
 			buildPhases = (
+				890259AAE469A2C11F78272C /* [CP] Check Pods Manifest.lock */,
 				230841581DF6F6DE00A98559 /* Sources */,
 				230841591DF6F6DE00A98559 /* Frameworks */,
 				2308415A1DF6F6DE00A98559 /* Resources */,
+				80551C84569754F104BE2A18 /* [CP] Embed Pods Frameworks */,
+				FB8FB13BF4DE62B514E0451E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -135,6 +162,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		80551C84569754F104BE2A18 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SensorTag/Pods-SensorTag-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		890259AAE469A2C11F78272C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FB8FB13BF4DE62B514E0451E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SensorTag/Pods-SensorTag-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		230841581DF6F6DE00A98559 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -186,6 +261,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -236,6 +312,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -263,7 +340,9 @@
 		};
 		2308416F1DF6F6DE00A98559 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D6A8B2878480211FBC05918 /* Pods-SensorTag.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 9A3JHQM97D;
 				INFOPLIST_FILE = SensorTag/Info.plist;
@@ -276,7 +355,9 @@
 		};
 		230841701DF6F6DE00A98559 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ABBF673CFBDBA22C2D4A8CC6 /* Pods-SensorTag.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 9A3JHQM97D;
 				INFOPLIST_FILE = SensorTag/Info.plist;
@@ -306,6 +387,7 @@
 				230841701DF6F6DE00A98559 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
