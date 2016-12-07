@@ -43,9 +43,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        //TODO make sure that tcp manager dont hang the app
+        DispatchQueue.global(qos: .userInitiated).async {
         let tvp = TCPManager(addr: "130.229.133.95", port: 6667)
-        tvp.sendString("iphone hi")//todo example only
-        tvp.close()
+       // tvp.reconnect()
+            tvp.sendString("iphone hi")//todo example only
+            tvp.close()
+            print("connect")
+        }
         // Initialize central manager on load
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
@@ -207,11 +213,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         self.statusLabel.text = "Connected"
         //print("Data recieved! ")
-        
-        if characteristic.uuid == IRTemperatureDataUUID {
+        switch  characteristic.uuid {
+        case IRTemperatureDataUUID:
             self.ambientTemperature = SensorTag.getAmbientTemperature(characteristic.value!)
             self.objectTemperature = SensorTag.getObjectTemperature(characteristic.value!, ambientTemperature: self.ambientTemperature)
-           
+        default: print(characteristic.uuid); break
         }
     }
 }
