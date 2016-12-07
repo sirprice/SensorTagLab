@@ -216,8 +216,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         switch  characteristic.uuid {
         case IRTemperatureDataUUID:
             self.ambientTemperature = SensorTag.getAmbientTemperature(characteristic.value!)
-            self.objectTemperature = SensorTag.getObjectTemperature(characteristic.value!, ambientTemperature: self.ambientTemperature)
-        default: print(characteristic.uuid); break
+            self.objectTemperature = SensorTag.getObjectTemperature(characteristic.value!)
+        default: print("defautl peripheral: \(characteristic.uuid)"); break
         }
     }
 }
