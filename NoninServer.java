@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.Date;
 
 public class NoninServer {
 
@@ -19,11 +20,14 @@ public class NoninServer {
 				try {
 					socket = server.accept();
 					System.out.println(socket.getInetAddress());
-					
+					Date today = new Date();
+					today.setHours(0);
+
 					reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					writer = new PrintWriter(new FileWriter("nonin.txt"));
-					
+					writer = new PrintWriter(new FileWriter("nonin.txt",true));
+
 					String line = reader.readLine();
+					writer.println(today);
 					while(line != null) {
 						System.out.println(line);
 						writer.println(line);

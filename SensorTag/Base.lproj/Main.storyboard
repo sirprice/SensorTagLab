@@ -65,12 +65,18 @@
                                     <constraint firstAttribute="bottom" secondItem="HVy-P8-omE" secondAttribute="bottom" constant="11" id="3Ww-hN-Rmm"/>
                                 </constraints>
                             </stackView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jhN-Oy-47D">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="30" maxValue="255" translatesAutoresizingMaskIntoConstraints="NO" id="jhN-Oy-47D">
                                 <rect key="frame" x="101" y="235" width="118" height="31"/>
+                                <connections>
+                                    <action selector="sliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Xld-8W-69W"/>
+                                </connections>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcL-EZ-vy1">
                                 <rect key="frame" x="16" y="235" width="46" height="30"/>
                                 <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="start:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dJj-Cs-dfr"/>
+                                </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="fsi-Bc-sGr">
                                 <rect key="frame" x="67" y="100" width="187" height="30"/>
@@ -79,13 +85,13 @@
                                         <rect key="frame" x="0.0" y="0.0" width="126.5" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="6667" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zg9-Xd-aEE">
                                         <rect key="frame" x="131.5" y="0.0" width="55.5" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                 </subviews>
                             </stackView>
@@ -128,7 +134,10 @@
                     <connections>
                         <outlet property="ambientTemperatureLabel" destination="HVy-P8-omE" id="oEr-eE-FHj"/>
                         <outlet property="chart" destination="bbp-xc-z4d" id="m6d-O3-hLs"/>
+                        <outlet property="ipaddress" destination="eeH-Tt-6un" id="OAk-xv-5fO"/>
                         <outlet property="objectTemperatureLabel" destination="4gF-fy-lik" id="9Bn-bg-IaV"/>
+                        <outlet property="port" destination="Zg9-Xd-aEE" id="N7e-2y-PzC"/>
+                        <outlet property="sliderLabel" destination="ghl-Dc-NOP" id="9nM-8g-2fQ"/>
                         <outlet property="statusLabel" destination="eHM-Tg-ZBg" id="IWJ-PI-4x7"/>
                     </connections>
                 </viewController>

@@ -24,8 +24,18 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
        //var statusLabel : UILabel!
  //var ambientTemperatureLabel : UILabel!
    // var objectTemperatureLabel : UILabel!
+    @IBOutlet weak var ipaddress: UITextField!
+    @IBOutlet weak var sliderLabel: UILabel!
+    @IBAction func start(_ sender: Any) {
+    }
     
     @IBOutlet weak var chart: BarChartView!
+    @IBOutlet weak var port: UITextField!
+    @IBAction func sliderChanged(_ sender: UISlider) {
+        //todo send new conf 
+        let val = sender.value
+        sliderLabel.text = "\(val*10) ms"
+    }
   
     @IBAction func save(_ sender: UIButton) {
      //   statusLabel.text = "12345678901234567890123"
