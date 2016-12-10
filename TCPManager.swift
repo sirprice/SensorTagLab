@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Charts
 
 class TCPManager {
     private var outputStream:OutputStream?
@@ -50,6 +51,12 @@ class TCPManager {
     
     func sendString(_ back:String) -> Int{
         return (outputStream?.write(back, maxLength:back.cString(using: .utf8)!.count)) ?? -2
+    }
+    
+    func sendMesuredData(dataEntries: [BarChartDataEntry]){
+        print("Messured data: \(dataEntries.description)")
+        print("Messured size: \(dataEntries.count)")
+        
     }
     
     
