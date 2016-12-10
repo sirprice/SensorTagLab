@@ -57,7 +57,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func save(_ sender: UIButton) {
-
+        UserDefaults.standard.synchronize()
         if  sensorTagCtl.connected {
             NotificationCenter.default.removeObserver(self, name: SensorTagController.notifyNewData, object: nil)
             
@@ -126,7 +126,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        ipaddr.text = UserDefaults.standard.string(forKey: "ip")
+        if let tmp:Int = UserDefaults.standard.object(forKey: "port") as! Int? {
+            if tmp > 0 {
+                port.text = String(tmp)
+            }
+        }
       
         // Initialize sensor controller
         sensorTagCtl.initializeSensorController()
@@ -136,7 +141,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         self.ipaddr.delegate = self
         // Initialize central manager on load
-        
+        let tmp = UserDefaults.standard.array(forKey: "dataEntries") as! [Double]
+            print(tmp)
+            for (index,val) in tmp.enumerated() {
+                dataEntries.append( BarChartDataEntry(x: Double(index), y: Double(val)))
+                print(index)
+            }
+            showFinalChart()
+        //}
+        //TODO index instead of 0
+        //BarChartDataEntry(x: Double(index), y: Double(value))
+
         
         
     }

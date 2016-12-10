@@ -135,7 +135,7 @@
 				TargetAttributes = {
 					2308415B1DF6F6DE00A98559 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = 9A3JHQM97D;
+						DevelopmentTeam = 3T3PJMFFPR;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -356,10 +356,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 9A3JHQM97D;
+				DEVELOPMENT_TEAM = 3T3PJMFFPR;
 				INFOPLIST_FILE = SensorTag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cjdev.SensorTag;
+				PRODUCT_BUNDLE_IDENTIFIER = com.exyr.SensorTag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -371,10 +371,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 9A3JHQM97D;
+				DEVELOPMENT_TEAM = 3T3PJMFFPR;
 				INFOPLIST_FILE = SensorTag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cjdev.SensorTag;
+				PRODUCT_BUNDLE_IDENTIFIER = com.exyr.SensorTag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
