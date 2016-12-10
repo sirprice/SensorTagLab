@@ -28,7 +28,7 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mKM-Cr-7wN">
                                 <rect key="frame" x="270" y="235" width="34" height="30"/>
-                                <state key="normal" title="Stop"/>
+                                <state key="normal" title="Save"/>
                                 <connections>
                                     <action selector="save:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Mgu-Ya-Qdd"/>
                                 </connections>
@@ -79,13 +79,16 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="fsi-Bc-sGr">
-                                <rect key="frame" x="67" y="100" width="187" height="30"/>
+                                <rect key="frame" x="49.5" y="100" width="222" height="30"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="130.229.155.100" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eeH-Tt-6un">
                                         <rect key="frame" x="0.0" y="0.0" width="126.5" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="done"/>
+                                        <connections>
+                                            <action selector="ipChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="96v-fS-XBh"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="6667" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zg9-Xd-aEE">
                                         <rect key="frame" x="131.5" y="0.0" width="55.5" height="30"/>
@@ -93,6 +96,13 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g87-yM-WNY">
+                                        <rect key="frame" x="192" y="0.0" width="30" height="30"/>
+                                        <state key="normal" title="Set"/>
+                                        <connections>
+                                            <action selector="setIpPort:" destination="BYZ-38-t0r" eventType="touchUpInside" id="afr-rm-eGV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1000 ms" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ghl-Dc-NOP">
@@ -134,7 +144,7 @@
                     <connections>
                         <outlet property="ambientTemperatureLabel" destination="HVy-P8-omE" id="oEr-eE-FHj"/>
                         <outlet property="chart" destination="bbp-xc-z4d" id="m6d-O3-hLs"/>
-                        <outlet property="ipaddress" destination="eeH-Tt-6un" id="OAk-xv-5fO"/>
+                        <outlet property="ipaddr" destination="eeH-Tt-6un" id="n55-F4-U76"/>
                         <outlet property="objectTemperatureLabel" destination="4gF-fy-lik" id="9Bn-bg-IaV"/>
                         <outlet property="port" destination="Zg9-Xd-aEE" id="N7e-2y-PzC"/>
                         <outlet property="sliderLabel" destination="ghl-Dc-NOP" id="9nM-8g-2fQ"/>

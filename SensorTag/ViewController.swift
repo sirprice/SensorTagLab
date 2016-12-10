@@ -10,40 +10,57 @@ import UIKit
 import CoreBluetooth
 import Charts
 
-class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
-   
+class ViewController: UIViewController, UITextFieldDelegate,CBCentralManagerDelegate, CBPeripheralDelegate {
+    
     var datanr = 0
     var dataEntries: [BarChartDataEntry] = []
     var chartData = BarChartData()
     var lineDataSet = LineChartDataSet()
-    var periodicInterval = 100
-    // Title labels
-
+    var periodicInterval:Int {
+        get{
+            return (UserDefaults.standard.object(forKey: "periodicInterval") ?? 100) as! Int
+        }
+        set{
+            UserDefaults.standard.set(newValue, forKey: "periodicInterval")
+        }
+    }
+    var centralManager : CBCentralManager!
+    var sensorTagPeripheral : CBPeripheral!
+    
+    // Table View
+    var sensorTagTableView : UITableView!
+    
     //var titleLabel : UILabel!
+    @IBOutlet weak var ipaddr: UITextField!
     var tagService: CBService? = nil
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var ambientTemperatureLabel: UILabel!
     @IBOutlet weak var objectTemperatureLabel: UILabel!
-       //var statusLabel : UILabel!
- //var ambientTemperatureLabel : UILabel!
-   // var objectTemperatureLabel : UILabel!
+    //var statusLabel : UILabel!
+    //var ambientTemperatureLabel : UILabel!
+    // var objectTemperatureLabel : UILabel!
     @IBOutlet weak var ipaddress: UITextField!
     @IBOutlet weak var sliderLabel: UILabel!
     @IBAction func start(_ sender: Any) {
         startSensors()
+        //.resignFirstResponder()
+        
     }
-
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(false)
+    }
     
     @IBOutlet weak var chart: BarChartView!
     @IBOutlet weak var port: UITextField!
     @IBAction func sliderChanged(_ sender: UISlider) {
-        //todo send new conf 
+        //todo send new
         periodicInterval = Int(sender.value)
         sliderLabel.text = "\(periodicInterval*10) ms"
     }
-  
+    
     @IBAction func save(_ sender: UIButton) {
-     //   statusLabel.text = "12345678901234567890123"
+        //   statusLabel.text = "12345678901234567890123"
         terminateSensors()
     }
     
@@ -59,14 +76,42 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
-    // BLE
-    var centralManager : CBCentralManager!
-    var sensorTagPeripheral : CBPeripheral!
     
-    // Table View
-    var sensorTagTableView : UITableView!
-
-
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    @IBAction func setIpPort(_ sender: UIButton) {
+        //ipaddr.resignFirstResponder()
+        if let ip:String = matches(for: "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}", in: ipaddr.text!).first{
+            print(ip)
+            if let port = Int(port.text!){
+                UserDefaults.standard.set(ip, forKey: "ip")
+                ipaddr.resignFirstResponder()
+                UserDefaults.standard.set(port,forKey:"port")
+            }
+        }
+    }
+    
+    @IBAction func ipChanged(_ sender: UITextField) {
+        sender.text = sender.text?.replacingOccurrences(of: ",", with: ".")
+    }
+    func matches(for regex: String, in text: String) -> [String] {
+        
+        do {
+            let regex = try NSRegularExpression(pattern: regex)
+            let nsString = text as NSString
+            let results = regex.matches(in: text, range: NSRange(location: 0, length: nsString.length))
+            return results.map { nsString.substring(with: $0.range)}
+        } catch let error {
+            print("invalid regex: \(error.localizedDescription)")
+            return []
+        }
+    }
+    
+    // BLE
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -77,26 +122,26 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         //chart.data = chartData
         
-        
+        self.ipaddr.delegate = self
         //TODO make sure that tcp manager dont hang the app
         DispatchQueue.global(qos: .userInitiated).async {
-        let tvp = TCPManager(addr: "130.229.155.100", port: 6667)
-       // tvp.reconnect()
+            let tvp = TCPManager(addr: "130.229.155.100", port: 6667)
+            // tvp.reconnect()
             tvp.sendString("iphone hi")//todo example only
             tvp.close()
             print("connect")
         }
         // Initialize central manager on load
         centralManager = CBCentralManager(delegate: self, queue: nil)
-    
         
-        }
-
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     
     /*!
      *  @method centralManagerDidUpdateState:
@@ -118,7 +163,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             // Scan for peripherals if BLE is turned on
             central.scanForPeripherals(withServices: nil, options: nil)
             self.statusLabel.text = "Searching for BLE Devices"
-
+            
         } else {
             // Can have different conditions for all states if needed - show generic alert for now
             self.statusLabel.text = "Error, Bluetooth switched off or not initialized"
@@ -131,7 +176,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     // Check out the discovered peripherals to find Sensor Tag
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
-        print("Advertiesed Data: \(advertisementData.description)")
+        // print("Advertiesed Data: \(advertisementData.description)")
         
         if SensorTag.sensorTagFound(advertisementData) == true {
             
@@ -143,8 +188,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             self.sensorTagPeripheral = peripheral
             self.sensorTagPeripheral.delegate = self
             self.centralManager.connect(peripheral, options: nil)
-
-
+            
+            
         }
         else {
             self.statusLabel.text = "Sensor Tag NOT Found"
@@ -177,40 +222,40 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             }
         }
     }
-
+    
     
     // sätter igång utvalda sensorer i SensorTagen
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         
         print("Found service")
         self.tagService = service
-
-//        self.statusLabel.text = "Enabling sensors"
-//        
-//        let enableValue: [UInt8] = [1]
-//        
-//        let enablyBytes = Data(bytes: enableValue , count: enableValue.count)
-//        
-//        for charateristic in service.characteristics! {
-//            let thisCharacteristic = charateristic as CBCharacteristic
-//            if SensorTag.isValidDataCharacteristic(thisCharacteristic) {
-//                // Enable Sensor Notification
-//                print("DataCharacteristic was valid: \(thisCharacteristic.description)")
-//                self.sensorTagPeripheral.setNotifyValue(true, for: thisCharacteristic)
-//            }
-//            if SensorTag.isValidConfigCharacteristic(thisCharacteristic) {
-//                // Enable Sensor
-//                print("ConfigCharacteristic was valid: \(thisCharacteristic.description)")
-//                self.sensorTagPeripheral.writeValue(enablyBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
-//            }
-//        }
+        
+        //        self.statusLabel.text = "Enabling sensors"
+        //
+        //        let enableValue: [UInt8] = [1]
+        //
+        //        let enablyBytes = Data(bytes: enableValue , count: enableValue.count)
+        //
+        //        for charateristic in service.characteristics! {
+        //            let thisCharacteristic = charateristic as CBCharacteristic
+        //            if SensorTag.isValidDataCharacteristic(thisCharacteristic) {
+        //                // Enable Sensor Notification
+        //                print("DataCharacteristic was valid: \(thisCharacteristic.description)")
+        //                self.sensorTagPeripheral.setNotifyValue(true, for: thisCharacteristic)
+        //            }
+        //            if SensorTag.isValidConfigCharacteristic(thisCharacteristic) {
+        //                // Enable Sensor
+        //                print("ConfigCharacteristic was valid: \(thisCharacteristic.description)")
+        //                self.sensorTagPeripheral.writeValue(enablyBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
+        //            }
+        //        }
     }
-
-    // sensortaggen är nu redo för att göra stordåd. och tar nu emot data :) 
+    
+    // sensortaggen är nu redo för att göra stordåd. och tar nu emot data :)
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         self.statusLabel.text = "Connected"
-
+        
         if characteristic.uuid == IRTemperatureDataUUID {
             //print("Data recieved! ")
             datanr += 1
@@ -230,7 +275,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             }
             
             let chartDataSet = BarChartDataSet(values: displayData, label: "Temperature Count")
-        
+            
             chartData = BarChartData(dataSet: chartDataSet)
             chart.data = chartData
             
