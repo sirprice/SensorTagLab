@@ -135,14 +135,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
         
         self.ipaddr.delegate = self
-        //TODO make sure that tcp manager dont hang the app
-        DispatchQueue.global(qos: .userInitiated).async {
-            let tvp = TCPManager(addr: "130.229.155.100", port: 6667)
-            // tvp.reconnect()
-            tvp.sendString("iphone hi")//todo example only
-            tvp.close()
-            print("connect")
-        }
         // Initialize central manager on load
         
         

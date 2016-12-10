@@ -27,8 +27,8 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mKM-Cr-7wN">
-                                <rect key="frame" x="270" y="235" width="34" height="30"/>
-                                <state key="normal" title="Save"/>
+                                <rect key="frame" x="268" y="235" width="36" height="30"/>
+                                <state key="normal" title="Send"/>
                                 <connections>
                                     <action selector="save:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Mgu-Ya-Qdd"/>
                                 </connections>
@@ -66,13 +66,13 @@
                                 </constraints>
                             </stackView>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="30" maxValue="255" translatesAutoresizingMaskIntoConstraints="NO" id="jhN-Oy-47D">
-                                <rect key="frame" x="89" y="235" width="142" height="31"/>
+                                <rect key="frame" x="91" y="235" width="138" height="31"/>
                                 <connections>
                                     <action selector="sliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Xld-8W-69W"/>
                                 </connections>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcL-EZ-vy1">
-                                <rect key="frame" x="16" y="235" width="34" height="30"/>
+                                <rect key="frame" x="16" y="235" width="36" height="30"/>
                                 <state key="normal" title="Start"/>
                                 <connections>
                                     <action selector="start:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dJj-Cs-dfr"/>
