@@ -18,6 +18,7 @@ let IRTemperatureServiceUUID = CBUUID(string: "F000AA00-0451-4000-B000-000000000
 // Characteristics
 let IRTemperatureDataUUID   = CBUUID(string: "F000AA01-0451-4000-B000-000000000000")
 let IRTemperatureConfigUUID = CBUUID(string: "F000AA02-0451-4000-B000-000000000000")
+let IRTemperaturePeriodUUID = CBUUID(string: "F000AA03-0451-4000-B000-000000000000")
 
 class SensorTag {
     
@@ -115,5 +116,13 @@ class SensorTag {
         return false
 
     }
+    class func isValidPeriodCharacteristic(_ characteristic : CBCharacteristic) -> Bool {
+        if characteristic.uuid == IRTemperaturePeriodUUID {
+            return true
+        }
+        return false
+        
+    }
+
 }
 
