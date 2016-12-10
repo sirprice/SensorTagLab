@@ -21,6 +21,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var statusLabel : UILabel!
     var ambientTemperatureLabel : UILabel!
     var objectTemperatureLabel : UILabel!
+    var on = false
+    var tagService: CBService? = nil
     
     @IBOutlet weak var chart: BarChartView!
   
@@ -34,6 +36,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var objectTemperature: Double = 0.0 {
         didSet {
             objectTemperatureLabel.text = "Object Temperature: \(objectTemperature)"
+        }
+    }
+    @IBAction func touch(_ sender: UIButton) {
+        if  on {
+            terminateSensors()
+            on = false
+        } else {
+            startSensors()
+            on = true
         }
     }
     
@@ -199,6 +210,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     // sätter igång utvalda sensorer i SensorTagen
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         
+        print("Found service")
+        self.tagService = service
 //        self.statusLabel.text = "Enabling sensors"
 //        
 //        let enableValue: [UInt8] = [1]
@@ -263,59 +276,57 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         let enablyBytes = Data(bytes: enableValue , count: enableValue.count)
         
-        for service in self.sensorTagPeripheral.services! {
+        
+        for charateristic in (self.tagService?.characteristics!)! {
             
-            for charateristic in service.characteristics! {
+            
+            let thisCharacteristic = charateristic as CBCharacteristic
+            
+            if SensorTag.isValidDataCharacteristic(thisCharacteristic) {
+                // Enable Sensor Notification
+                print("DataCharacteristic was valid: \(thisCharacteristic.description)")
+                //self.sensorTagPeripheral.setNotifyValue(false, for: thisCharacteristic)
+            }
+            if SensorTag.isValidConfigCharacteristic(thisCharacteristic) {
+                // Enable Sensor
+                print("ConfigCharacteristic was valid: \(thisCharacteristic.description)")
+                self.sensorTagPeripheral.writeValue(enablyBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
                 
-                let thisCharacteristic = charateristic as CBCharacteristic
-                
-                if SensorTag.isValidDataCharacteristic(thisCharacteristic) {
-                    // Enable Sensor Notification
-                    print("DataCharacteristic was valid: \(thisCharacteristic.description)")
-                    self.sensorTagPeripheral.setNotifyValue(false, for: thisCharacteristic)
-                }
-                if SensorTag.isValidConfigCharacteristic(thisCharacteristic) {
-                    // Enable Sensor
-                    print("ConfigCharacteristic was valid: \(thisCharacteristic.description)")
-                    self.sensorTagPeripheral.writeValue(enablyBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
-              
-                }
             }
         }
+        
     }
     
     func startSensors(){
-        self.statusLabel.text = "Enabling sensors"
+        self.statusLabel.text = "Starting sensors"
         
-       
         
-        for service in self.sensorTagPeripheral.services! {
-            for charateristic in service.characteristics! {
-                let thisCharacteristic = charateristic as CBCharacteristic
-                if SensorTag.isValidDataCharacteristic(thisCharacteristic) {
-                    // Enable Sensor Notification
-                    print("DataCharacteristic was valid: \(thisCharacteristic.description)")
-                    self.sensorTagPeripheral.setNotifyValue(true, for: thisCharacteristic)
-                }
+        for charateristic in (self.tagService?.characteristics!)! {
+            let thisCharacteristic = charateristic as CBCharacteristic
+            if SensorTag.isValidDataCharacteristic(thisCharacteristic) {
+                // Enable Sensor Notification
+                print("DataCharacteristic was valid: \(thisCharacteristic.description)")
+                self.sensorTagPeripheral.setNotifyValue(true, for: thisCharacteristic)
+            }
+            
+            if SensorTag.isValidConfigCharacteristic(thisCharacteristic) {
+                // Enable Sensor
+                let enableValue: [UInt8] = [1]
+                let enablyBytes = Data(bytes: enableValue , count: enableValue.count)
                 
-                if SensorTag.isValidConfigCharacteristic(thisCharacteristic) {
-                    // Enable Sensor
-                    let enableValue: [UInt8] = [1]
-                    let enablyBytes = Data(bytes: enableValue , count: enableValue.count)
-                    
-                    print("ConfigCharacteristic was valid: \(thisCharacteristic.description)")
-                    self.sensorTagPeripheral.writeValue(enablyBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
-                    
-                }
-                if  SensorTag.isValidPeriodCharacteristic(thisCharacteristic){
-                    // Setting period
-                    let periodValue: [UInt8] = [50]
-                    let periodBytes = Data(bytes: periodValue , count: periodValue.count)
-                    print("PeriodCharacteristic was valid: \(thisCharacteristic.description)")
-                    self.sensorTagPeripheral.writeValue(periodBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
-                }
+                print("ConfigCharacteristic was valid: \(thisCharacteristic.description)")
+                self.sensorTagPeripheral.writeValue(enablyBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
+                
+            }
+            if  SensorTag.isValidPeriodCharacteristic(thisCharacteristic){
+                // Setting period
+                let periodValue: [UInt8] = [50]
+                let periodBytes = Data(bytes: periodValue , count: periodValue.count)
+                print("PeriodCharacteristic was valid: \(thisCharacteristic.description)")
+                self.sensorTagPeripheral.writeValue(periodBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
             }
         }
+        
     }
 }
 
