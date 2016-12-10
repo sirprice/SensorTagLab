@@ -35,6 +35,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func start(_ sender: Any) {
         if sensorTagCtl.connected {
+            NotificationCenter.default.addObserver(self, selector: #selector(ViewController.notificationNewData), name: SensorTagController.notifyNewData, object: nil)
+            
             sensorTagCtl.startSensors(periodicInterval: self.periodicInterval)
             dataEntries = [BarChartDataEntry]()
             
@@ -57,13 +59,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction func save(_ sender: UIButton) {
 
         if  sensorTagCtl.connected {
+            NotificationCenter.default.removeObserver(self, name: SensorTagController.notifyNewData, object: nil)
             
             sensorTagCtl.terminateSensors()
             
             // save and send data to server
             networkCtl.sendMesuredData(dataEntries: self.dataEntries)
             
-            dataEntries = [BarChartDataEntry]()
+            //dataEntries = [BarChartDataEntry]()
+            print("antal m'tningar att visa: \(dataEntries.count)")
+            showFinalChart()
         }
 
     }
@@ -126,11 +131,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Initialize sensor controller
         sensorTagCtl.initializeSensorController()
         
-        
-        
-
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.notificationNewData), name: SensorTagController.notifyNewData, object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.notificationNewState(_:)), name: SensorTagController.notifyNewState, object: nil)
 
         
@@ -160,9 +160,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         ambientTemperatureLabel.text = String(sensorTagCtl.ambientTemperature)
         objectTemperatureLabel.text = String(sensorTagCtl.objectTemperature)
         
-        
+        print("New data, data in sensor tag count : \(sensorTagCtl.dataEntries.count)")
         var index = 1
         dataEntries = [BarChartDataEntry]()
+        
+        
         
         for value in sensorTagCtl.dataEntries {
             
@@ -204,6 +206,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
         chart.maxVisibleCount = 5
         chart.moveViewToX(Double(chartData.entryCount))
     }
+    
+    func showFinalChart (){
+        
+        let chartDataSet = BarChartDataSet(values: self.dataEntries, label: "Temperature Count")
+        
+        chartData = BarChartData(dataSet: chartDataSet)
+        chart.data = chartData
+        
+        chart.notifyDataSetChanged()
+        chart.invalidateIntrinsicContentSize()
+    }
+    
 }
 
 

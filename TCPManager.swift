@@ -54,8 +54,7 @@ class TCPManager {
     }
     
     func sendMesuredData(dataEntries: [BarChartDataEntry]){
-        print("Messured data: \(dataEntries.description)")
-        print("Messured size: \(dataEntries.count)")
+        
         
     }
     
