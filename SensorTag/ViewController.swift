@@ -30,6 +30,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     @IBOutlet weak var ipaddress: UITextField!
     @IBOutlet weak var sliderLabel: UILabel!
     @IBAction func start(_ sender: Any) {
+        startSensors()
     }
 
     
@@ -43,6 +44,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
   
     @IBAction func save(_ sender: UIButton) {
      //   statusLabel.text = "12345678901234567890123"
+        terminateSensors()
     }
     
     // values
