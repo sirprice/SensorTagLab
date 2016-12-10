@@ -22,7 +22,7 @@ class TCPManager {
     private func connect(){
         var inp :InputStream?
         var out :OutputStream?
-        try? Stream.getStreamsToHost(withName: addr, port: port, inputStream: &inp, outputStream: &out)
+        Stream.getStreamsToHost(withName: addr, port: port, inputStream: &inp, outputStream: &out)
         //print()
         inputStream = inp!
         outputStream = out!

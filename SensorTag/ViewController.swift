@@ -16,16 +16,34 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var dataEntries: [BarChartDataEntry] = []
     var chartData = BarChartData()
     var lineDataSet = LineChartDataSet()
+    var periodicInterval = 100
     // Title labels
-    var titleLabel : UILabel!
-    var statusLabel : UILabel!
-    var ambientTemperatureLabel : UILabel!
-    var objectTemperatureLabel : UILabel!
-    var on = false
+
+    //var titleLabel : UILabel!
     var tagService: CBService? = nil
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var ambientTemperatureLabel: UILabel!
+    @IBOutlet weak var objectTemperatureLabel: UILabel!
+       //var statusLabel : UILabel!
+ //var ambientTemperatureLabel : UILabel!
+   // var objectTemperatureLabel : UILabel!
+    @IBOutlet weak var ipaddress: UITextField!
+    @IBOutlet weak var sliderLabel: UILabel!
+    @IBAction func start(_ sender: Any) {
+    }
+
     
     @IBOutlet weak var chart: BarChartView!
+    @IBOutlet weak var port: UITextField!
+    @IBAction func sliderChanged(_ sender: UISlider) {
+        //todo send new conf 
+        periodicInterval = Int(sender.value)
+        sliderLabel.text = "\(periodicInterval*10) ms"
+    }
   
+    @IBAction func save(_ sender: UIButton) {
+     //   statusLabel.text = "12345678901234567890123"
+    }
     
     // values
     var ambientTemperature: Double = 0.0 {
@@ -36,15 +54,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var objectTemperature: Double = 0.0 {
         didSet {
             objectTemperatureLabel.text = "Object Temperature: \(objectTemperature)"
-        }
-    }
-    @IBAction func touch(_ sender: UIButton) {
-        if  on {
-            terminateSensors()
-            on = false
-        } else {
-            startSensors()
-            on = true
         }
     }
     
@@ -69,7 +78,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         //TODO make sure that tcp manager dont hang the app
         DispatchQueue.global(qos: .userInitiated).async {
-        let tvp = TCPManager(addr: "130.229.133.95", port: 6667)
+        let tvp = TCPManager(addr: "130.229.155.100", port: 6667)
        // tvp.reconnect()
             tvp.sendString("iphone hi")//todo example only
             tvp.close()
@@ -77,45 +86,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
         // Initialize central manager on load
         centralManager = CBCentralManager(delegate: self, queue: nil)
-        
-        // Set up title label
-        titleLabel = UILabel()
-        titleLabel.text = "Sensor Tag"
-        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
-        titleLabel.sizeToFit()
-        titleLabel.center = CGPoint(x: self.view.frame.midX, y: self.titleLabel.bounds.midY+28)
-        self.view.addSubview(titleLabel)
-        
-        // Set up status label
-        statusLabel = UILabel()
-        statusLabel.textAlignment = NSTextAlignment.center
-        statusLabel.text = "Loading..."
-        statusLabel.font = UIFont(name: "HelveticaNeue-Light", size: 12)
-        statusLabel.sizeToFit()
-        //statusLabel.center = CGPoint(x: self.view.frame.midX, y: (titleLabel.frame.maxY + statusLabel.bounds.height/2) )
-        statusLabel.frame = CGRect(x: self.view.frame.origin.x, y: self.titleLabel.frame.maxY, width: self.view.frame.width, height: self.statusLabel.bounds.height)
-        self.view.addSubview(statusLabel)
-        
-        // Set up ambient temperature label
-        ambientTemperatureLabel = UILabel()
-        ambientTemperatureLabel.textAlignment = NSTextAlignment.center
-        ambientTemperatureLabel.text = "Temperature: n/a"
-        ambientTemperatureLabel.font = UIFont(name: "HelveticaNeue-Light", size: 12)
-        ambientTemperatureLabel.sizeToFit()
-        ambientTemperatureLabel.frame = CGRect(x: self.view.frame.origin.x, y: self.statusLabel.frame.maxY, width: self.view.frame.width, height: self.ambientTemperatureLabel.bounds.height)
-        self.view.addSubview(ambientTemperatureLabel)
-        
-        // Set up object temperature label
-        objectTemperatureLabel = UILabel()
-        objectTemperatureLabel.textAlignment = NSTextAlignment.center
-        objectTemperatureLabel.text = "Temperature: n/a"
-        objectTemperatureLabel.font = UIFont(name: "HelveticaNeue-Light", size: 12)
-        objectTemperatureLabel.sizeToFit()
-        objectTemperatureLabel.frame = CGRect(x: self.view.frame.origin.x, y: self.ambientTemperatureLabel.frame.maxY, width: self.view.frame.width, height: self.objectTemperatureLabel.bounds.height)
-        self.view.addSubview(objectTemperatureLabel)
-
-
-        
     
         
         }
@@ -212,6 +182,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         print("Found service")
         self.tagService = service
+
 //        self.statusLabel.text = "Enabling sensors"
 //        
 //        let enableValue: [UInt8] = [1]
@@ -320,7 +291,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             }
             if  SensorTag.isValidPeriodCharacteristic(thisCharacteristic){
                 // Setting period
-                let periodValue: [UInt8] = [50]
+                let periodValue: [UInt8] = [UInt8(periodicInterval)]
                 let periodBytes = Data(bytes: periodValue , count: periodValue.count)
                 print("PeriodCharacteristic was valid: \(thisCharacteristic.description)")
                 self.sensorTagPeripheral.writeValue(periodBytes, for: thisCharacteristic, type: CBCharacteristicWriteType.withResponse)
